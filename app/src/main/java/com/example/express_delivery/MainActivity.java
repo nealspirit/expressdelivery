@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         //初始化控件
         toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
-        add_delivery = findViewById(R.id.add_delivery);
+        add_delivery = findViewById(R.id.refresh);
         add_delivery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

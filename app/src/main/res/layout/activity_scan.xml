@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".ScanActivity">
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
@@ -24,4 +23,14 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/switch_light"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/light_off"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"/>
+
+</RelativeLayout>
