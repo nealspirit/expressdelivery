@@ -2,15 +2,18 @@ package com.example.express_delivery;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import org.litepal.LitePal;
+
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
-    private FloatingActionButton add_delivery;
+    private DeliveryAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,13 +22,18 @@ public class MainActivity extends AppCompatActivity {
         //初始化控件
         toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
-        add_delivery = findViewById(R.id.refresh);
-        add_delivery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,addDeliveryActivity.class);
-                startActivity(intent);
-            }
-        });
+
+        //设置recyclerView
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        GridLayoutManager layoutManager = new GridLayoutManager(this,3);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new DeliveryAdapter();
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
     }
 }

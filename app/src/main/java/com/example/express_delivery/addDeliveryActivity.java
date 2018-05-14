@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
@@ -26,11 +27,9 @@ public class addDeliveryActivity extends AppCompatActivity implements View.OnCli
     private Toolbar toolbar;
     private ImageView iv_scanQR;
     private EditText DeliveryNum;
-    private Button deliveryLoc,addDelivery;
-    private List<String> optionsItem = new ArrayList<>();
-    private List<String> optionsRow = new ArrayList<>();
-    private List<List<String>> optionslist = new ArrayList<>();
-    private OptionsPickerView pvOptions;
+    private Button addDelivery;
+    private TextView tv_location;
+    private String Loc;//记录货物地址
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,50 +38,27 @@ public class addDeliveryActivity extends AppCompatActivity implements View.OnCli
         //初始化控件
         toolbar = findViewById(R.id.toolbar_addDelivery);
         setSupportActionBar(toolbar);
+        tv_location = findViewById(R.id.delivery_location);
         iv_scanQR = findViewById(R.id.scanQR);
         iv_scanQR.setOnClickListener(this);
         DeliveryNum = findViewById(R.id.et_deliveryNum);
         addDelivery = findViewById(R.id.add_delivery);
-        deliveryLoc = findViewById(R.id.delivery_location);
-        deliveryLoc.setOnClickListener(this);
-        initPicker();
+        addDelivery.setOnClickListener(this);
         //设定toolbarMenu按钮
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-    }
-
-    /*
-    * 初始化滚轮选择器
-    * */
-    private void initPicker() {
-        optionsItem.add("01");
-        optionsRow.add("01");
-        optionsRow.add("02");
-        List<String> optionslistItems_01 = new ArrayList<>();
-        optionslistItems_01.add("01");
-        optionslistItems_01.add("02");
-        optionslistItems_01.add("03");
-        List<String> optionslistItems_02 = new ArrayList<>();
-        optionslistItems_02.add("01");
-        optionslistItems_02.add("02");
-        optionslistItems_02.add("03");
-        optionslist.add(optionslistItems_01);
-        optionslist.add(optionslistItems_02);
-
-        pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                deliveryLoc.setText(optionsRow.get(options1) + "行" + optionslist.get(options1).get(options2) + "列");
-            }
-        })
-                .isDialog(true)
-                .setTitleText("位置选择")
-                .setLabels("行","列","")
-                .build();
-        pvOptions.setPicker(optionsRow,optionslist);
+        //设定货架号
+        int position = getIntent().getIntExtra(ShowDeliveryItemActivity.DELIVERY_LOC,10);
+        if (position >= 0 && position < 6){
+            Loc = Utility.location(position);
+            String loc_string = Utility.location_string(position);
+            tv_location.setText(loc_string);
+        }else if (position > 6){
+            Toast.makeText(this, "数据错误", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     @Override
@@ -106,18 +82,22 @@ public class addDeliveryActivity extends AppCompatActivity implements View.OnCli
                         .setCaptureActivity(ScanActivity.class)
                         .initiateScan();
                 break;
-            case R.id.delivery_location:
-                pvOptions.show();
+            case R.id.add_delivery:
+                String delivery_Num = DeliveryNum.getText().toString();
+                if (delivery_Num == null || delivery_Num.equals("")){
+                    Toast.makeText(this, "运单号不能为空", Toast.LENGTH_SHORT).show();
+                }else {
+                    Delivery delivery = new Delivery();
+                    delivery.setLocation(Loc);
+                    delivery.setdeliveryNum(delivery_Num);
+                    delivery.setRandomCode(Utility.initcode());
+                    delivery.save();
+                    finish();
+                }
                 break;
             default:
                 break;
         }
-    }
-
-    private int initcode() {
-        Random random = new Random();
-        int code = random.nextInt(9999);
-        return code;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

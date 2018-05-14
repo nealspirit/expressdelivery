@@ -2,7 +2,7 @@
     <dbname value="DeliveryShelf"/>
     <version value='1'/>
     <list>
-        <mapping class='com.example.express_delivery.delivery'/>
+        <mapping class='com.example.express_delivery.Delivery'/>
     </list>
 
 </litepal>

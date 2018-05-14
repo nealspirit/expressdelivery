@@ -27,7 +27,7 @@
             android:text="货架号:"/>
 
         <TextView
-            android:id="@+id/delivery_location"
+            android:id="@+id/tv_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"/>
@@ -44,26 +44,29 @@
             android:layout_height="wrap_content"
             android:text="运单号："/>
 
-        <EditText
-            android:id="@+id/et_deliveryNum"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv_deliveryNum"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="number"/>
-
-        <ImageView
-            android:id="@+id/scanQR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:src="@drawable/scanqr"/>
+            android:gravity="center_horizontal"/>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/add_delivery"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="添加货物"
-        android:layout_margin="12dp"/>
+        android:orientation="horizontal"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取件码："/>
+
+        <TextView
+            android:id="@+id/tv_Code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"/>
+    </LinearLayout>
 
 </LinearLayout>
