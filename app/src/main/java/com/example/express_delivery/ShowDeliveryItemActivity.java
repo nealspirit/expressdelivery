@@ -1,7 +1,6 @@
 package com.example.express_delivery;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -65,7 +64,7 @@ public class ShowDeliveryItemActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar,menu);
+        getMenuInflater().inflate(R.menu.toolbar_showdelivery,menu);
         return true;
     }
 

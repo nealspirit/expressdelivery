@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import org.litepal.LitePal;
@@ -35,5 +37,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.showTable:
+                Intent intent = new Intent(MainActivity.this,TableActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return true;
     }
 }
