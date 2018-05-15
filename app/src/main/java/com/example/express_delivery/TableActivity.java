@@ -32,7 +32,7 @@ public class TableActivity extends AppCompatActivity {
         deliveryList = DataSupport.findAll(Delivery.class);
         if (deliveryList.size() > 0){
             for (Delivery delivery : deliveryList){
-                textView.append(delivery.getLocation() + " | " + delivery.getdeliveryNum() + " | " + delivery.getRandomCode() + "\n");
+                textView.append(delivery.getLocation() + " | " + delivery.getdeliveryNum() + " | " + delivery.getPhoneNum() + " | " + delivery.getRandomCode() + "\n");
             }
         }else {
             textView.setText("无数据");

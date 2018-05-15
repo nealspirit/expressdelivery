@@ -1,6 +1,8 @@
 package com.example.express_delivery;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,11 +19,12 @@ import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
-public class ShowDeliveryItemActivity extends AppCompatActivity {
+public class ShowDeliveryItemActivity extends AppCompatActivity implements View.OnClickListener{
     private Toolbar toolbar;
-    private TextView location,deliveryNum,Code;
+    private TextView location,deliveryNum,phoneNum,Code;
     public static final String DELIVERY_LOC = "delivery_loc";
-    private String Loc,Loc_string,delivery_Num,delivery_Code;
+    private String Loc,Loc_string,delivery_Num,delivery_PhoneNum,delivery_Code;
+    private ImageView phone_call,phone_message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +35,12 @@ public class ShowDeliveryItemActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         location = findViewById(R.id.tv_location);
         deliveryNum = findViewById(R.id.tv_deliveryNum);
+        phoneNum = findViewById(R.id.tv_deliveryPhoneNum);
         Code = findViewById(R.id.tv_Code);
+        phone_call = findViewById(R.id.PhoneCall);
+        phone_call.setOnClickListener(this);
+        phone_message = findViewById(R.id.SendMessage);
+        phone_message.setOnClickListener(this);
         //设定toolbarMenu按钮
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null){
@@ -49,6 +59,9 @@ public class ShowDeliveryItemActivity extends AppCompatActivity {
                 //取得运单号
                 delivery_Num = delivery.getdeliveryNum();
                 deliveryNum.setText(delivery_Num);
+                //取得手机号
+                delivery_PhoneNum = delivery.getPhoneNum();
+                phoneNum.setText(delivery_PhoneNum);
                 //取得随机码
                 delivery_Code = String.valueOf(delivery.getRandomCode());
                 Code.setText(delivery_Code);
@@ -97,5 +110,27 @@ public class ShowDeliveryItemActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = null;
+        switch (v.getId()){
+            case R.id.PhoneCall:
+                intent = new Intent(Intent.ACTION_DIAL);
+                Uri data_phoneCall = Uri.parse("tel:" + delivery_PhoneNum);
+                intent.setData(data_phoneCall);
+                startActivity(intent);
+                break;
+            case R.id.SendMessage:
+                intent = new Intent(Intent.ACTION_SENDTO);
+                Uri data_phoneMessage = Uri.parse("smsto:" + delivery_PhoneNum);
+                intent.putExtra("sms_body","您好！您的快递到了，请到快递货柜处出示二维码取件");
+                intent.setData(data_phoneMessage);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 }
