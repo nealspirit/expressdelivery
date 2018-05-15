@@ -79,6 +79,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.ViewHo
             DataSupport.deleteAll(Delivery.class,"location = ?",loc);
         }else if (deliveries == null || deliveries.size() == 0){
             holder.deliveryStatus.setImageResource(R.drawable.packet_open);
+            holder.tv_deliveryNum.setText("");
         }
     }
 
