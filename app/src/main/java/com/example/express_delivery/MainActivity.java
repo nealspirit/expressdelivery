@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.ScaleAnimation;
 
@@ -36,8 +37,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         //设定动画
         ScaleAnimation scaleAnimation = new ScaleAnimation(0,1,0,1, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
-        scaleAnimation.setDuration(500);
-        LayoutAnimationController layoutAnimationController = new LayoutAnimationController(scaleAnimation,0.2f);
+        scaleAnimation.setDuration(800);
+        scaleAnimation.setInterpolator(new BounceInterpolator());
+        LayoutAnimationController layoutAnimationController = new LayoutAnimationController(scaleAnimation,0.1f);
         layoutAnimationController.setOrder(LayoutAnimationController.ORDER_NORMAL);
         recyclerView.setLayoutAnimation(layoutAnimationController);
     }
