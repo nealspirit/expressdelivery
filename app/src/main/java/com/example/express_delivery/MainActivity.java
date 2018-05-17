@@ -10,6 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.ScaleAnimation;
 
 import org.litepal.LitePal;
 
@@ -31,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new DeliveryAdapter();
         recyclerView.setAdapter(adapter);
+        //设定动画
+        ScaleAnimation scaleAnimation = new ScaleAnimation(0,1,0,1, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        scaleAnimation.setDuration(500);
+        LayoutAnimationController layoutAnimationController = new LayoutAnimationController(scaleAnimation,0.2f);
+        layoutAnimationController.setOrder(LayoutAnimationController.ORDER_NORMAL);
+        recyclerView.setLayoutAnimation(layoutAnimationController);
     }
 
     @Override
