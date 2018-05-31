@@ -14,12 +14,22 @@ import android.view.animation.Animation;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.ScaleAnimation;
+import android.widget.Toast;
+
+import com.mysql.jdbc.Connection;
 
 import org.litepal.LitePal;
+import org.litepal.crud.DataSupport;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private DeliveryAdapter adapter;
+    private List<Delivery> deliveryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +73,77 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this,TableActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.update:
+                updateToWeb();
+                break;
         }
         return true;
+    }
+
+    private void updateToWeb() {
+        new Thread(new Runnable() {
+            private Connection connection = null;
+
+            @Override
+            public void run() {
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    connection = (Connection) DriverManager.getConnection("jdbc:mysql://39.108.211.170:3306/jsp_db", "root", "580420");
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "出现未知错误", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "连接服务器失败，请检查网络连接", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                try{
+                    Statement stmt = connection.createStatement();
+                    //删除数据库中所有数据
+                    String sql = "delete from delivery_data";
+                    stmt.executeUpdate(sql);
+                    //增加一条数据
+                    deliveryList = DataSupport.findAll(Delivery.class);
+                    if (deliveryList.size() > 0){
+                        for (Delivery delivery : deliveryList){
+                            sql = "insert into delivery_data (delivery_num,delivery_phone,delivery_location,random_num) values ('" + delivery.getdeliveryNum() + "','" + delivery.getPhoneNum() + "','" + delivery.getLocation() + "','" + delivery.getRandomCode() + "')";
+                            stmt.executeUpdate(sql);
+                        }
+                    }
+                    stmt.close();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "上传数据成功", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "上传数据出现错误", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }finally {
+                    if (connection != null){
+                        try{
+                            connection.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }).start();
     }
 }
